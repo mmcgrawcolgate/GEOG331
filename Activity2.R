@@ -1,7 +1,7 @@
 #ACTIVITY 2 CODE
 
 #reads data into variable datW
-datW <- read.csv("noaa_weather//2011124.csv")
+datW <- read.csv("noaa_weather//2011124.csv", stringsAsFactors = T)
 
 #displays overall stats and figures from data
 str(datW)
@@ -13,7 +13,7 @@ datW$year <- as.numeric(format(datW$dateF,"%Y"))
 #question 2 code
 
 #check unique site names
-levels(datW$NAME)
+unique(datW$NAME)
 
 #find mean of aberdeen
 mean(datW$TMAX[datW$NAME == "ABERDEEN, WA US"], na.rm=TRUE)
@@ -32,6 +32,9 @@ averageTemp
 #convert level to numbers
 datW$siteN <- as.numeric(datW$NAME)
 
+#for use in question 4 to make 2 by 2 window of histograms
+par(mfrow=c(2,2))
+
 #create histogram
 hist(datW$TAVE[datW$siteN == 1],
      freq=FALSE, 
@@ -40,3 +43,48 @@ hist(datW$TAVE[datW$siteN == 1],
      ylab="Relative frequency",
      col="grey50",
      border="white")
+
+#question 3 code
+help("hist")
+help("colors")
+
+#add mean line with red color
+abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+       col = "tomato3",
+       lwd = 3)
+
+#adding dashed sd line above and below mean 
+abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+       col = "tomato3", 
+       lty = 3,
+       lwd = 3)
+
+abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+       col = "tomato3", 
+       lty = 3,
+       lwd = 3)
+
+#question 4, creating 3 other histograms and adding colored lines
+hist(datW$TAVE[datW$siteN == 2],
+     freq=FALSE, 
+     main = paste(levels(datW$NAME)[2]),
+     xlab = "Average daily temperature (degrees C)", 
+     ylab="Relative frequency",
+     col="grey50",
+     border="white")
+
+#mean line
+abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE), 
+       col = "cadetblue",
+       lwd = 3)
+
+#two sd lines
+abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+       col = "cadetblue", 
+       lty = 3,
+       lwd = 3)
+
+abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+       col = "cadetblue", 
+       lty = 3,
+       lwd = 3)
