@@ -44,13 +44,12 @@ datW$siteN <- as.numeric(datW$NAME)
 
 ###QUESTION 3 CODE
 help("hist")
-help("colors")
 
 ###QUESTION 4 CODE
 #for use in question 4 to make 2 by 2 window of histograms
 par(mfrow=c(2,2))
 
-#create histogram
+        #aberdeen, CA
 hist(datW$TAVE[datW$siteN == 1],
      freq=FALSE, 
      main = paste(levels(datW$NAME)[1]),
@@ -74,8 +73,6 @@ abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) + sd(datW$TAVE[datW$siteN
        lty = 3,
        lwd = 3)
 
-#question 4, creating 3 other histograms and adding colored lines
-
         #livermore, ca
 hist(datW$TAVE[datW$siteN == 2],
      freq=FALSE, 
@@ -84,16 +81,14 @@ hist(datW$TAVE[datW$siteN == 2],
      ylab="Relative frequency",
      col="grey50",
      border="white")
-
-        #mean line and two sd lines
 abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE), 
        col = "cadetblue",
        lwd = 3)
-abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 2],na.rm=TRUE), 
        col = "cadetblue", 
        lty = 3,
        lwd = 3)
-abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 2],na.rm=TRUE), 
        col = "cadetblue", 
        lty = 3,
        lwd = 3)
@@ -106,16 +101,14 @@ hist(datW$TAVE[datW$siteN == 3],
      ylab="Relative frequency",
      col="grey50",
      border="white")
-
-        #mean line and two sd lines
 abline(v = mean(datW$TAVE[datW$siteN == 3],na.rm=TRUE), 
        col = "darkgoldenrod1",
        lwd = 3)
-abline(v = mean(datW$TAVE[datW$siteN == 3],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 3],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 3],na.rm=TRUE), 
        col = "darkgoldenrod1", 
        lty = 3,
        lwd = 3)
-abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 3],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 3],na.rm=TRUE), 
        col = "darkgoldenrod1", 
        lty = 3,
        lwd = 3)
@@ -128,21 +121,19 @@ hist(datW$TAVE[datW$siteN == 4],
      ylab="Relative frequency",
      col="grey50",
      border="white")
-
-        #mean line and two sd lines
 abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE), 
        col = "blue2",
        lwd = 3)
-abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 4],na.rm=TRUE), 
        col = "blue2", 
        lty = 3,
        lwd = 3)
-abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 4],na.rm=TRUE), 
        col = "blue2", 
        lty = 3,
        lwd = 3)
 
-#create vector for histogram 1
+###QUESTION 5 CODE
 h1 <- hist(datW$TAVE[datW$siteN == 1],
            freq=FALSE, 
            main = paste(levels(datW$NAME)[1]),
@@ -170,34 +161,8 @@ points(x.plot,
        lwd = 4, 
        lty = 2)
 
-#find p of normal dist for site 1
-pnorm(0,
-      mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
-      sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
 
-#finds area of the code below 5
-pnorm(5,
-      mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
-      sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
-
-#finds probability of area from 0 to 5
-pnorm(5,
-      mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
-      sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))- pnorm(0,
-                                                        mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
-                                                        sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
-
-#finds probability of area above 20
-1 - pnorm(20,
-          mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
-          sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
-
-#gives 95th percentile of the data, by temp
-qnorm(0.95,
-      mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
-      sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
-
-#QUESTION 6 CODE
+###QUESTION 6 CODE
 
 #creates a reference for the new mean of 4 degrees higher
 newmean <- mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE)+4
@@ -207,18 +172,18 @@ newmean <- mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE)+4
       mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
       sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
 
-#QUESTION 7 CODE
+###QUESTION 7 CODE
 
 #histogram of daily average precip in aberdeen
 hist(datW$PRCP[datW$siteN == 1],
      freq=FALSE, 
      main = paste(levels(datW$NAME)[1]),
-     xlab = "Average daily precipitation (cm)", 
+     xlab = "Average daily precipitation (mm)", 
      ylab="Relative frequency",
      col="grey50",
      border="black")
 
-#QUESTION 8 CODE
+###QUESTION 8 CODE
 
 #average daily precip across sites
 averagePrecip <- aggregate(datW$PRCP, by=list(datW$NAME), FUN="mean",na.rm=TRUE)
@@ -232,7 +197,7 @@ yearPrecip
 hist(yearPrecip$x[yearPrecip$Group.2==2],
         freq=FALSE, 
         main = paste(levels(datW$NAME)[2]),
-        xlab = "Yearly Precipitation", 
+        xlab = "Yearly Precipitation (mm)", 
         ylab = "Relative frequency",
         col = "grey50",
         border = "black")
@@ -242,7 +207,8 @@ hist(yearPrecip$x[yearPrecip$Group.2==2],
 #finds yearly precip averages across sites
 allprcp <- aggregate(yearPrecip, by=list(yearPrecip$Group.2), FUN="mean", na.rm=TRUE)
 allprcp
+averageTemp
 
 ###QUESTION 10 CODE
-paste(levels(datW$NAME)[5])
-#None, see attached sheet for GitHub Link
+
+#None, see attached sheet for GitHub Link :)
