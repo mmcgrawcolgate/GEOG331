@@ -1,9 +1,10 @@
 #ACTIVITY 2 CODE
+#author: Matt McGraw
 
 #reads data into variable datW
 datW <- read.csv("noaa_weather//2011124.csv", stringsAsFactors = T)
 
-#QUESTION 1 CODE
+###QUESTION 1 CODE
 #displays overall stats and figures from data
 str(datW)
 
@@ -11,7 +12,7 @@ str(datW)
 datW$dateF <- as.Date(datW$DATE, "%Y-%m-%d")
 datW$year <- as.numeric(format(datW$dateF,"%Y"))
 
-#QUESTION 2 CODE
+###QUESTION 2 CODE
 #vector with character and integer values
 vec1 <- c("word", 3, "word2", 7, "string")
 
@@ -41,11 +42,11 @@ averageTemp
 #convert level to numbers
 datW$siteN <- as.numeric(datW$NAME)
 
-#QUESTION 3 CODE
+###QUESTION 3 CODE
 help("hist")
 help("colors")
 
-#QUESTION 4 CODE
+###QUESTION 4 CODE
 #for use in question 4 to make 2 by 2 window of histograms
 par(mfrow=c(2,2))
 
@@ -215,4 +216,33 @@ hist(datW$PRCP[datW$siteN == 1],
      xlab = "Average daily precipitation (cm)", 
      ylab="Relative frequency",
      col="grey50",
-     border="white")
+     border="black")
+
+#QUESTION 8 CODE
+
+#average daily precip across sites
+averagePrecip <- aggregate(datW$PRCP, by=list(datW$NAME), FUN="mean",na.rm=TRUE)
+averagePrecip
+
+#yearly precip function
+yearPrecip <- aggregate(datW$PRCP, by=list(datW$year, datW$siteN), FUN="sum", na.rm=TRUE)
+yearPrecip
+
+#creates a histogram for yearly precip at Livermore, CA
+hist(yearPrecip$x[yearPrecip$Group.2==2],
+        freq=FALSE, 
+        main = paste(levels(datW$NAME)[2]),
+        xlab = "Yearly Precipitation", 
+        ylab = "Relative frequency",
+        col = "grey50",
+        border = "black")
+
+###QUESTION 9 CODE
+
+#finds yearly precip averages across sites
+allprcp <- aggregate(yearPrecip, by=list(yearPrecip$Group.2), FUN="mean", na.rm=TRUE)
+allprcp
+
+###QUESTION 10 CODE
+paste(levels(datW$NAME)[5])
+#None, see attached sheet for GitHub Link
