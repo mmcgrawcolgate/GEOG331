@@ -22,7 +22,7 @@ assert(2==2, "err: unequal values")
 
 ###QUESTION 3
 
-#reading in data file needed
+#reading in data file needed, with header function
 datW <- read.csv("bewkes//bewkes_weather.csv", na.strings=c("#N/A"), skip=3, header=FALSE)
 print(datW[1,])
 
@@ -36,7 +36,7 @@ print(sensorInfo)
 colnames(datW) <- colnames(sensorInfo)
 print(datW[1,])
 
-###DATA QA QC
+###----DATA QA QC----###
 
 #convert to standardized formatting
 dates <- mdy_hm(datW$timestamp, tz= "America/New_York")
@@ -52,25 +52,12 @@ datW$hour <- hour(dates) + (minute(dates)/60)
 #calculate decimal day of year
 datW$DD <- datW$doy + (datW$hour/24)
 
-#quick preview of new date calcualtions
-datW[1,]
-
 #calculate possible missing values
 length(which(is.na(datW$air.temperature)))
 length(which(is.na(datW$wind.speed)))
 length(which(is.na(datW$precipitation)))
 length(which(is.na(datW$soil.moisture)))
 length(which(is.na(datW$soil.temp)))
-
-#plot to see where data is missing
-plot(datW$DD, datW$soil.moisture, pch=19, type="b", xlab = "Day of Year",
-     ylab="Soil moisture (cm3 water per cm3 soil)")
-
-###QA QC TESTS
-
-#visual plot of air temperature
-plot(datW$DD, datW$air.temperature, pch=19, type="b", xlab = "Day of Year",
-     ylab="Air temperature (degrees C)")
 
 ###QUESTION 4 CODE
 
@@ -121,7 +108,7 @@ assert(length(datW$air.tempQ2)==length(datW$wind.speedQ1), "err: unequal lengths
 
 #create plot of data, both points and lines
 help(plot)
-plot(datW$DD, datW$wind.speedQ1, pch="19", type="b", main="Wind Speed", xlab="Day of Year", 
+plot(datW$DD, datW$wind.speedQ1, pch=19, type="b", main="Wind Speed", xlab="Day of Year", 
      ylab="Wind Speed")
 
 
@@ -132,16 +119,16 @@ plot(datW$DD, datW$wind.speedQ1, pch="19", type="b", main="Wind Speed", xlab="Da
 
 par(mfrow=c(2,2))
 
-plot(datW$DD, datW$soil.moisture, pch="19", type="l", main="Soil Moisture", xlab="Day of Year",
+plot(datW$DD, datW$soil.moisture, pch=19, type="l", main="Soil Moisture", xlab="Day of Year",
      ylab="Soil Moisture")
 
-plot(datW$DD, datW$soil.temp, pch="19", type="l", main="Soil Temp", xlab="Day of Year",
+plot(datW$DD, datW$soil.temp, pch=19, type="l", main="Soil Temp", xlab="Day of Year",
      ylab="Soil Temp")
 
-plot(datW$DD, datW$air.tempQ2, pch="19", type="l", main="Air Temp", xlab="Day of Year",
+plot(datW$DD, datW$air.tempQ2, pch=19, type="l", main="Air Temp", xlab="Day of Year",
      ylab="Air Temp")
 
-plot(datW$DD, datW$precipitation, pch="19", type="l", main="Precipitation", xlab="Day of Year",
+plot(datW$DD, datW$precipitation, pch=19, type="l", main="Precipitation", xlab="Day of Year",
      ylab="Precipitation")
 
 ###QUESTION 8 CODE
