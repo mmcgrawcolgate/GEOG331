@@ -119,14 +119,52 @@ datW$wind.speedQ1 <- ifelse(datW$precipitation  >= 2 & datW$lightning.acvitivy >
 #check to see if same length
 assert(length(datW$air.tempQ2)==length(datW$wind.speedQ1), "err: unequal lengths")
 
-#create plot of data, points and lines
+#create plot of data, both points and lines
 help(plot)
-plot(datW$DD, datW$wind.speedQ1, type="p", main="Wind Speed", xlab="Day of Year", 
+plot(datW$DD, datW$wind.speedQ1, pch="19", type="b", main="Wind Speed", xlab="Day of Year", 
      ylab="Wind Speed")
 
-plot(datW$DD, datW$wind.speedQ1, type="l", main="Wind Speed", xlab="Day of Year", 
-     ylab="Wind Speed")
 
 ###QUESTION 7 CODE
 
+#create 4 plots side by side to compare variables and see if soil temp and 
+#moisture measurements make sense
+
+par(mfrow=c(2,2))
+
+plot(datW$DD, datW$soil.moisture, pch="19", type="l", main="Soil Moisture", xlab="Day of Year",
+     ylab="Soil Moisture")
+
+plot(datW$DD, datW$soil.temp, pch="19", type="l", main="Soil Temp", xlab="Day of Year",
+     ylab="Soil Temp")
+
+plot(datW$DD, datW$air.tempQ2, pch="19", type="l", main="Air Temp", xlab="Day of Year",
+     ylab="Air Temp")
+
+plot(datW$DD, datW$precipitation, pch="19", type="l", main="Precipitation", xlab="Day of Year",
+     ylab="Precipitation")
+
+###QUESTION 8 CODE
+
+help(data.frame)
+help(table)
+
+#create new data frame with precipitation, airtemp, windspeed, other vars
+dat8 <- data.frame("totalPrecipitation" = sum(datW$precipitation, na.rm =TRUE))
+dat8$average.airtemp <- mean(datW$air.temperature, na.rm = TRUE)
+dat8$average.windspeed <- mean(datW$wind.speed, na.rm=TRUE)
+dat8$average.soilmoisture <- mean(datW$soil.moisture, na.rm=TRUE)
+dat8$average.soiltemperature <- mean(datW$soil.temp, na.rm = TRUE)
+dat8$number.observations <- length(datW$air.temperature)
+dat8$number.days <- max(datW$DD, na.rm = TRUE)
+
+str(dat8)
+
+###QUESTION 9 CODE
+
+##see question 7 code on making plots of all four
+
+###QUESTION 10 CODE
+
+#https://github.com/mmcgrawcolgate/GEOG331/blob/master/Activity3.R
 
