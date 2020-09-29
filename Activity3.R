@@ -26,6 +26,9 @@ assert(2==2, "err: unequal values")
 datW <- read.csv("bewkes//bewkes_weather.csv", na.strings=c("#N/A"), skip=3, header=FALSE)
 print(datW[1,])
 
+#reviewing data
+str(datW)
+
 #reading in data as sensor information
 sensorInfo <- read.csv("bewkes//bewkes_weather.csv", na.strings=c("#N/A"), nrows=2)
 
@@ -99,3 +102,31 @@ points(datW$DD[datW$precipitation > 0], datW$precipitation[datW$precipitation > 
 #plot lightning points only when there is lightning     
 points(datW$DD[lightscale > 0], lightscale[lightscale > 0],
        col= "tomato3", pch=19)
+
+#test code using assert function, shows lightscale can exist
+assert(length(lightscale)==length(datW$precipitation),"err: unequal lengths" )
+
+###QUESTION 6 CODE
+
+#air temperature column
+datW$air.tempQ2 <- ifelse(datW$precipitation  >= 2 & datW$lightning.acvitivy >0, NA,
+                          ifelse(datW$precipitation > 5, NA, datW$air.tempQ1))
+
+#wind speed column
+datW$wind.speedQ1 <- ifelse(datW$precipitation  >= 2 & datW$lightning.acvitivy >0, NA,
+                          ifelse(datW$precipitation > 5, NA, datW$wind.speed))
+
+#check to see if same length
+assert(length(datW$air.tempQ2)==length(datW$wind.speedQ1), "err: unequal lengths")
+
+#create plot of data, points and lines
+help(plot)
+plot(datW$DD, datW$wind.speedQ1, type="p", main="Wind Speed", xlab="Day of Year", 
+     ylab="Wind Speed")
+
+plot(datW$DD, datW$wind.speedQ1, type="l", main="Wind Speed", xlab="Day of Year", 
+     ylab="Wind Speed")
+
+###QUESTION 7 CODE
+
+
