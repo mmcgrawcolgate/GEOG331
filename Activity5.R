@@ -104,6 +104,7 @@ polygon(c(aveF$doy, rev(aveF$doy)), #x coordinates
 
 #line added based on 2017 averages, made purple for contrast
 lines(average2017$doy, average2017$dailyAve, col="purple")
+
 axis(1, seq(1,365, by=31), #tick intervals
      lab = c("jan","feb","mar","apr","may","jun","jul","aug",
              "sep","oct","nov","dec")) #tick labels for month
@@ -122,12 +123,38 @@ legend("topright", c("mean","1 standard deviation","2017 mean"), #legend items
 
 ###QUESTION 7 CODE###
 
-datfull <- datP[datP$HPCP>0, ]
+library(dplyr)
 
+#create code to adjust for days of precip with all 24 hours
+total_hours <- datP %>% group_by(year, doy) %>%
+  count()
+fulldays <- total_hours[total_hours$n == 24,]
+datP <- datP %>% mutate(doy_year = paste(doy, year, sep= "_"))
+fulldays <- fulldays %>% mutate(doy_year = paste(doy, year, sep= "_"))
+datP$complete <- ifelse(datP$doy_year %in% fulldays$doy_year, 1, 0)
+
+#create plot with days with 24 hours added
+par(mai=c(1,1,1,1))
+
+plot(datD$decYear,datD$discharge, 
+     type="l", 
+     xlab="Year", 
+     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
+     lwd=2,
+     ylim=c(0,400),
+     xaxs="i", yaxs ="i") 
+
+#add in days with 24 hours of precipitation
+for (i in 1:nrow(fulldays)){
+  good <- datP[datP$complete == 1,]
+  m <- i + 24*(i-1) + 12
+  points(good[m,"decYear"], 350, pch=20, col="maroon", cex=0.7)
+}
+title("Yearly Discharge with Days with 24 Hours of Precip")
 
 ###QUESTION 8 CODE###
 
-#first hydrograph code
+##FIRST HYDROGRAPH CODE##
 hydroD <- datD[datD$doy >= 248 & datD$doy < 250 & datD$year == 2011,]
 hydroP <- datP[datP$doy >= 248 & datP$doy < 250 & datP$year == 2011,]
 
@@ -135,15 +162,19 @@ hydroP <- datP[datP$doy >= 248 & datP$doy < 250 & datP$year == 2011,]
 #go outside of the range so that it's easy to see high/low values
 #floor rounds down the integer
 yl <- floor(min(hydroD$discharge))-1
+
 #ceiling rounds up to the integer
 yh <- ceiling(max(hydroD$discharge))+1
+
 #minimum and maximum range of precipitation to plot
 pl <- 0
 pm <-  ceiling(max(hydroP$HPCP))+.5
+
 #scale precipitation to fit on the 
 hydroP$pscale <- (((yh-yl)/(pm-pl)) * hydroP$HPCP) + yl
 
 par(mai=c(1,1,1,1))
+
 #make plot of discharge
 plot(hydroD$decDay,
      hydroD$discharge, 
@@ -152,6 +183,7 @@ plot(hydroD$decDay,
      lwd=2,
      xlab="Day of year", 
      ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")))
+
 #add bars to indicate precipitation 
 for(i in 1:nrow(hydroP)){
   polygon(c(hydroP$decDay[i]-0.017,hydroP$decDay[i]-0.017,
@@ -160,8 +192,10 @@ for(i in 1:nrow(hydroP)){
           col=rgb(0.392, 0.584, 0.929,.2), border=NA)
 }
 
-
 ###QUESTION 9 CODE###
+
+#load in ggplot
+library(ggplot2)
 
 #mark days when seasons change
 spring <- 60
