@@ -24,8 +24,6 @@ g1966@proj4string
 
 ###QUESTION 2 CODE###
 
-spplot(g1966, "GLACNAME")
-
 #adjust glacier names to match across time periods
 g2015@data$GLACNAME <- ifelse(g2015@data$GLACNAME == "North Swiftcurrent Glacier",
                               "N. Swiftcurrent Glacier",
@@ -46,12 +44,14 @@ rgbL <- brick(redL, greenL, blueL)
 #add contrast to the imagery to see it better
 par(mai=c(1,1,1,1))
 plotRGB(rgbL, stretch="lin", axes=TRUE)
+
 #add polygons to plot
 plot(g1966, col="tan3", border=NA, add=TRUE)
 plot(g1998, col="royalblue3", add=TRUE, border=NA)
 plot(g2005, col="darkgoldenrod4", add=TRUE, border=NA)
 plot(g2015, col="tomato3", add=TRUE, border=NA)
 
+#zoom in
 plotRGB(rgbL, ext=c(289995,310000,5371253,5400000), stretch="lin")
 plot(g1966, col="palegreen2", border=NA, add=TRUE)
 plot(g1998, col="royalblue3", add=TRUE, border=NA)
@@ -69,11 +69,14 @@ for(i in 1:length(ndviYear)){
 
 ###QUESTION 3 CODE###
 
+#set up plots
 par(mfrow=c(1, 2))
+
 #plot the 1966 glacier
 plotRGB(rgbL, ext=c(289995,310000,5371253,5400000), stretch="lin")
 plot(g1966, col="palegreen2", border=NA, add=TRUE)
-#this plots 2013
+
+#plot 2003 ndvi
 plot(NDVIraster[[1]])
 
 ###QUESTION 4 CODE###
@@ -90,14 +93,15 @@ vector_maxes<-c(0.9999395,0.999779,0.999081,0.9999021,0.9999728,0.9997418,0.9999
              0.9994358,0.9998951,0.9999688,0.9997269,0.999855,0.9997797,
              0.9997877)
 
+#check max NDVI
 max(vector_maxes)
 
-#after checking the max of the vectors, 2010 has the maximum NDVI 
+#see that 2010 has max NDVI
 par(new=TRUE)
-plot(NDVIraster[[8]],axes=FALSE, frame.plot=TRUE)
+plot(NDVIraster[[8]], axes=FALSE, frame.plot=TRUE)
 
-# plotRGB(rgbL, ext=c(289995,310000,5371253,5400000), stretch="lin")
-plot(g2015p, axes=FALSE,bg=NA, border='black')
+#plot 2015 glaciers with no axes and black border
+plot(g2015p, axes=FALSE, bg=NA, border='black')
 
 
 ###QUESTION 5 CODE###
@@ -109,10 +113,12 @@ g1998p@data$a1998m.sq <- area(g1998p)
 g2005p@data$a2005m.sq <- area(g2005p)
 g2015p@data$a2015m.sq <- area(g2015p)
 
+#join data into a table
 gAllp1 <- join(g1966p@data,g1998p@data, by="GLACNAME", type="full")
 gAllp2 <- join(gAllp1,g2005p@data, by="GLACNAME", type="full")
 gAll <- join(gAllp2,g2015p@data, by="GLACNAME", type="full")
 
+#plot the area for each glacier
 plot(c(1966,1998,2005,2015), 
      c(gAll$a1966m.sq[1],gAll$a1998m.sq[1], gAll$a2005m.sq[1],gAll$a2015m.sq[1]),
      type="b", 
@@ -129,9 +135,7 @@ for(i in 2:39){
   
 }   
 
-spplot(g1966p, "GLACNAME")
-spplot(g2015p, "GLACNAME")
-
+#find areas of all glaciers in each time period
 gAll$a1966m.sq[1]
 gAll$a2015m.sq[1]
 
@@ -241,7 +245,21 @@ spplot(g2015, "meanChange")
 
 ###QUESTION 11 CODE###
 
+# take average value of NDVI and plot
+NDVIaverage <- calc(NDVIstack,fun=mean)
+plot(NDVIaverage)
 
+means <- zonal(NDVIaverage,
+                  buffRaster,
+                  "mean")
+
+means <- means[2:40, "mean"]
+g2015p@data$color <- ifelse(means < 0.2, "blue",
+                             ifelse(means < 0.4, "yellow", "red"))
+plot(NDVIaverage, ext=g2015p, axes=FALSE)
+plot(g2015p, border=g2015p@data$color, add=TRUE)
+legend("topleft",
+       legend = c("NDVI < 0.2", "0.2 <= NDVI < 0.4", "NDVI >=0.4"), cex = 0.4, fill=c("blue", "yellow", "red"))
 
 ###QUESTION 12 CODE###
 
